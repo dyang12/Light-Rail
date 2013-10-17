@@ -14,6 +14,8 @@ class Route
 
   def run(req, res)
     route_params = {}
+    m = /\d/.match(req.path)
+    route_params[:id] = m[0] unless m.nil?
     controller = controller_class.new(req, res, route_params)
     controller.invoke_action(action_name)
   end
