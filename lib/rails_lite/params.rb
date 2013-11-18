@@ -31,7 +31,7 @@ class Params
       if @params[primary_key].nil?
         @params[primary_key] = deep_setter(keys, value)
       else
-        @params[primary_key] = @params[primary_key].merge(deep_setter(keys, value))
+        @params[primary_key] = deep_merge(@params[primary_key], deep_setter(keys, value))
       end
     end
   end
@@ -48,5 +48,10 @@ class Params
       temp_hash = { keys.pop => value }
       deep_setter(keys, temp_hash)
     end
+  end
+  
+  def deep_merge(hash1, hash2)
+    #merges nested hashes
+    hash1.merge(hash2)
   end
 end

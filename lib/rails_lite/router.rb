@@ -14,7 +14,9 @@ class Route
 
   def run(req, res)
     route_params = {}
-    m = /\d/.match(req.path)
+    # /users\/(?<user_id>).*\/posts/(?<id>).*/ =~ "users/5"
+    # id # => "5"
+    m = /\d+/.match(req.path)
     route_params[:id] = m[0] unless m.nil?
     controller = controller_class.new(req, res, route_params)
     controller.invoke_action(action_name)
@@ -46,11 +48,11 @@ class Router
   end
 
   def match(req)
-    @routes.each do |route|
-      return route if route.matches?(req)
+    @routes.find do |route|
+      route.matches?(req)
     end
     
-    nil
+    # nil
   end
 
   def run(req, res)

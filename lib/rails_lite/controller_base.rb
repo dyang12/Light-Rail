@@ -21,7 +21,9 @@ class ControllerBase
   end
 
   def redirect_to(url)
-    unless already_rendered?
+    if already_rendered?
+      # raise DoubleRenderError, "can't render or redirect twice"
+    else
       @response.status = 302
       @response['location'] = url
       session.store_session(@response)
@@ -40,6 +42,7 @@ class ControllerBase
   end
 
   def render(template_name)
+    # filename = template_for(template_name)
     file = File.read("views/#{self.class.to_s.underscore}/#{template_name}.html.erb")
     template = ERB.new(file)
     render_content(template.result(binding), "text/html")
